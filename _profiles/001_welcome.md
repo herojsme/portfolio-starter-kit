@@ -11,8 +11,8 @@ ogImage:
   url: "/assets/profiles/hello&welcome2.png"
 ---
 
-公积金.
+欢迎查看我的个人网站.
 
-## Lorem Ipsum
+## 热烈欢迎
 
-监管机构.
+欢迎查看我的个人网站.
