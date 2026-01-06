@@ -2,7 +2,7 @@
 sort: 1
 title: "成品测试机"
 excerpt: "成品测试机项目"
-coverImage: "/assets/profiles/vision/FinishedProductTestProject/ui design/ai gen.png"
+coverImage: "/assets/profiles/vision/FinishedProductTestProject/ui design/aiGen.png"
 date: "2025.10-至今"
 author:
   name: 廿一
