@@ -1,0 +1,258 @@
+<!doctype html><html lang="zh" class="light"><head><meta charset="utf-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,maximum-scale=1,minimum-scale=1,initial-scale=1,user-scalable=no"><meta name="description" content="MasterGo 是一款面向团队的专业 UI / UX 设计工具，支持多人同时编辑、随时在线评审、设计一键交付，让想法更快实现。"><meta name="schema-version" content="v1.8.1"><link rel="apple-touch-icon" sizes="180x180" href="https://static.mastergo.com/static/favicon/apple-touch-icon-new.png"><link rel="icon" type="image/png" sizes="32x32" href="https://static.mastergo.com/static/favicon/favicon-32x32-new.png"><link rel="icon" type="image/png" sizes="16x16" href="https://static.mastergo.com/static/favicon/favicon-16x16-new.png"><script id="injectWasmLoad">var wasmhead=document.createElement("link");wasmhead.href="https://static.mastergo.com/static/resources/6f0c1ab5b/masterkit.wasm.br",wasmhead.setAttribute("rel","preload"),wasmhead.setAttribute("as","fetch"),wasmhead.setAttribute("crossorigin","anonymous"),document.head.append(wasmhead);var jshead=document.createElement("link");jshead.href="https://static.mastergo.com/static/resources/6f0c1ab5b/masterkit.js",jshead.setAttribute("rel","preload"),jshead.setAttribute("as","fetch"),jshead.setAttribute("crossorigin","anonymous"),document.head.append(jshead)</script><script>var lang = (function () {
+        const localLang = localStorage.getItem('_MASTER_GO_locale_');
+        if (localLang) {
+          return localLang === 'en-US' ? 'en-US' : 'zh-CN';
+        }
+        if (!navigator.language?.includes('zh')) {
+          return 'en-US';
+        }
+        return 'zh-CN';
+      })();</script><script>// preload api
+      (async function () {
+        if (!window.fetch) return;
+        var MASTER_PRELOAD = {};
+        var resProxy = function (d) {
+          if (!d || d.status !== 200) throw d;
+          return d.json();
+        };
+        var isFromEmbedSdk = false; // 判断是否是sdk
+        let token = '';
+
+        // vscode 插件鉴权
+        var searchParams = new URL(window.location).searchParams;
+        var VSCODE_SESSION_ID = searchParams.get('VSCODE_SESSION_ID') || '';
+        var OTHER_AUTH_SESSION = searchParams.get('OTHER_AUTH_SESSION') || '';
+        if (VSCODE_SESSION_ID) sessionStorage.setItem('VSCODE_SESSION_ID', VSCODE_SESSION_ID);
+        if (OTHER_AUTH_SESSION) sessionStorage.setItem('OTHER_AUTH_SESSION', OTHER_AUTH_SESSION);
+        else {
+          try {
+            const isInIframe = window.self !== window.top;
+            if (isInIframe) {
+              const urlParams = new URLSearchParams(window.location.search);
+              const source = urlParams.get('source');
+              token = urlParams.get('token');
+              const tenantId = urlParams.get('tenantId');
+              if (source === 'mg-embedding-sdk' && token) {
+                const embedding_object = {
+                  source,
+                  tenantId,
+                };
+                localStorage.setItem('MG_EMBEDDING_CONSTANTS', JSON.stringify(embedding_object));
+                window.MG_EMBEDDING_CONSTANTS = embedding_object;
+                isFromEmbedSdk = true;
+                localStorage.setItem('Integration-Embed', 'true');
+              }
+            }
+          } catch (err) {}
+
+          if (isFromEmbedSdk) {
+            const res = await fetch('/api/v1/signin/jwt', {
+              // 作为 done 免登录，需要第一次就进行鉴权处理
+              headers: {
+                'X-Auth-Token': token,
+                'Integration-Embed': 'true',
+              },
+              method: 'POST',
+            });
+          }
+        }
+
+        // common
+        var headers = {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+          MGVersion: '1.0',
+          lang: lang,
+        };
+        var seatManagerHeader = {
+          MGVersion: '1.0',
+          lang: lang,
+        };
+
+        if (VSCODE_SESSION_ID) {
+          headers['X-MG-AuthSession'] = VSCODE_SESSION_ID;
+          seatManagerHeader['X-MG-AuthSession'] = VSCODE_SESSION_ID;
+        }
+
+        if (OTHER_AUTH_SESSION) {
+          headers['X-Other-AuthSession'] = OTHER_AUTH_SESSION;
+          seatManagerHeader['X-Other-AuthSession'] = OTHER_AUTH_SESSION;
+        }
+
+        if (isFromEmbedSdk) {
+          headers['Integration-Embed'] = 'true';
+          seatManagerHeader['Integration-Embed'] = 'true';
+        }
+
+        // 判断是否在 iframe 中，添加 X-In-Iframe
+        var isInIframe = window.self !== window.top;
+        if (isInIframe) {
+          headers['X-In-Iframe'] = 'true';
+          seatManagerHeader['X-In-Iframe'] = 'true';
+        }
+        var res =
+          location.pathname.match(/(file|dev-workbench)\/(\d+)/) || location.hash.match(/(file|dev-workbench)\/(\d+)/);
+        if (res && res[2]) {
+          var fileId = res[2];
+          MASTER_PRELOAD['preloadDocumentId'] = Number(fileId);
+          console.info('[Phase]', 'preload document info start');
+
+          var inviteBatchId = null;
+          var inviteDocumentId = null;
+          var option = {
+            pageName: 'file',
+            dvid: '',
+          };
+
+          var inviteBatchIdMatch = location.search.match(/inviteBatchId=([^&]*)/);
+          if (inviteBatchIdMatch && inviteBatchIdMatch[1]) {
+            inviteBatchId = inviteBatchIdMatch[1];
+            option.inviteBatchId = inviteBatchId;
+          }
+
+          var inviteDocumentIdMatch = location.search.match(/inviteDocumentId=([^&]*)/);
+          if (inviteDocumentIdMatch && inviteDocumentIdMatch[1]) {
+            inviteDocumentId = inviteDocumentIdMatch[1];
+            option.inviteDocumentId = inviteDocumentId;
+          }
+
+          var dvidMatch = location.search.match(/dvid=([^&]*)/);
+          if (dvidMatch && dvidMatch[1]) {
+            option.dvid = dvidMatch[1];
+          }
+
+          var getDocumentApiPath = '/api/v1/documents/' + fileId;
+          var queryParams = new URLSearchParams();
+
+          if (inviteBatchId && inviteDocumentId) {
+            queryParams.append('inviteBatchId', inviteBatchId);
+            queryParams.append('inviteDocumentId', inviteDocumentId);
+          }
+          queryParams.append('pageName', option.pageName);
+          if (option.dvid) {
+            queryParams.append('dvId', option.dvid);
+          }
+
+          var fetchUrl = getDocumentApiPath + '?' + queryParams.toString();
+
+          var fetchDocumentInfo = fetch(fetchUrl, {
+            headers: seatManagerHeader,
+          });
+
+          var fetchDocumentSetting = fetch('/api/v1/document/setting/?docId=' + fileId, {
+            headers: seatManagerHeader,
+          });
+
+          MASTER_PRELOAD['preloadDocumentInfo'] = fetchDocumentInfo
+            .then((d) => {
+              return d.json().then((body) => {
+                if (d.status !== 200) {
+                  return Promise.reject({ response: { data: body, status: d.status } });
+                }
+                if (body.data && body.data.fileKey) {
+                  // 如果有历史版本，则将文件key存储到localStorage中
+                  if (option.dvid) {
+                    window.sessionStorage.setItem('hid', body.data.fileKey);
+                  }
+
+                  var controller = new AbortController();
+                  performance.mark('mg/fileLoad');
+                  var filePms = fetch('/data/' + body.data.fileKey + '?wv=' + 'v2.159.1', {
+                    cache: 'no-cache',
+                    headers: seatManagerHeader,
+                    signal: controller.signal,
+                  });
+                  MASTER_PRELOAD['preloadFileController'] = controller;
+                  MASTER_PRELOAD['preloadFileSize'] = filePms.then((d) => {
+                    var headerContentLength = d.headers.get('Content-Length');
+                    return headerContentLength === null || headerContentLength === undefined
+                      ? undefined
+                      : parseInt(headerContentLength);
+                  });
+                  MASTER_PRELOAD['preloadFileData'] = filePms.then((fileRes) => {
+                    if (!fileRes || fileRes.status !== 200)
+                      throw new Error('html preload data error: ' + fileRes?.status + fileRes?.statusText); // html-webpack-plugin/issues/950
+                    return fileRes;
+                  });
+                } else {
+                  return Promise.reject({
+                    response: d,
+                  });
+                }
+                return body.data;
+              });
+            })
+            .catch((error) => {
+              var data = error?.response?.data || {};
+              if (data?.code === 'OrganizationSSOStrict') {
+                sessionStorage.setItem('ssoOrgName', data?.data?.organizationName);
+                window.location.href = '/files/sso-login';
+                return;
+              }
+              console.error('获取文档信息失败:', error);
+              throw error;
+            });
+
+          MASTER_PRELOAD['preloadDocumentSetting'] = fetchDocumentSetting.then((settingResponse) => {
+            return settingResponse.json().then((settingData) => {
+              var documentSettingContent = settingData.data;
+
+              if (settingResponse.status !== 200) {
+                return Promise.reject({ response: { data: documentSettingContent, status: settingResponse.status } });
+              }
+
+              return documentSettingContent;
+            });
+          });
+        }
+
+        MASTER_PRELOAD['commonToggles'] = fetch('/unleash/toggles', {
+          headers,
+          method: 'POST',
+          body: JSON.stringify({ 'nameList[]': 'web.newNavBar,web.wssHostConfig,web.fontFeatures,web.fontSolidCpp,web.languageTansfer,web.showImageMenu,web.enableWecomLogin'.split(',') }),
+        }).then(resProxy);
+        MASTER_PRELOAD['commonConfig'] = fetch('/api/v1/config', {
+          headers: seatManagerHeader,
+        }).then(resProxy);
+        MASTER_PRELOAD['userInfo'] = fetch('/api/v1/user', {
+          headers: seatManagerHeader,
+        }).then(resProxy);
+        MASTER_PRELOAD['userInfo'].then((d) => {
+          if (d) {
+            MASTER_PRELOAD['userToggles'] = fetch('/api/v1/toggles', {
+              headers,
+              method: 'POST',
+              body: JSON.stringify({ 'nameList[]': 'web.slimClearDuplicateOpen,web.mgAgent,web.mgAgentEnableSelectModel,web.mgAgentEnablePublishTemplate,web.snippetGenPlugin,web.fontEventLoader,web.turtleDefault,web.dsl,web.disableStreamReader,web.encodeNewLineCpp,web.ttcSlice,web.webGpu,web.virtualPageShow,web.devMode,web.videoImportAuth,web.fontVariation,web.fontVariationBeta,web.exportToLanhu,web.emergencyNoticeLayerProperty,web.figmaTeam,web.orgUpgrade,web.imageGC,web.exportSketch,web.exportPDF,web.exportMG,web.freeMem,web.disableMasterkitVersion,web.disabledWasmSimdMode,web.imageResoureThemeLoadOptimize,web.resourceUse,web.DSM,web.userFeedbackForAIT2UI,web.v2OfAIT2UI,web.canPublishTeamLibComponentForAIT2UI,web.canSetTeamLibComponentToPublicForAIT2UIV2,web.canUploadT2UITemplate,web.fileChunkMode,web.fontKern,web.fontKernCpp,web.fontFeatures,web.disableFontSolidCpp,web.fontSolidCpp,web.d2cPanel,web.fontRender,web.lmocCacheCpp,web.enableLigaOrCalt,web.seatManageOne,web.textFallBackCpp,web.textArabicCpp,web.d2cGenericModel,web.enableNewPuaCpp,web.enableOrderedListOptCpp,web.annualReport,web.newMaskTypeCpp,web.componentSlot,web.enableGoogleFonts,web.disabledLibrary,web.iconExport,web.orgTrial,web.enableTextLineSpaceCpp,web.textSleepCpp,web.backgroundSaturation,web.upgradeAnnouncement,web.upgradeClientVersion,web.prototypeCreation,web.enableCommunity,web.loginRestrictions,web.helpsettings,web.useWssV2,web.enableVisable,web.note,web.styleListV2,web.newTeamLibDialog,web.prototypeTableV2,web.showDevBarWithEmpty,web.prototypeDynamicPanel,web.unitConvertion,web.newFontPlugin,web.enableInteractionInput,web.buttonOptimize,web.interactionButton,web.interactionToggle,web.enableInteractionSelect,web.enableOpenHiddenLayer,web.enableInteractionTree,web.interactionCheckbox,web.enableNewSearch,web.devbench,web.enableInteractionEchart,web.enableSafeSetting,web.enableExportSource,web.enableWecomLogin,web.enableImportInstanceShell,web.enableNewAIEntry,web.enableAISelectPrompt,web.enableCacheStealthy,web.enableImportServer,web.unSafeSandBox,web.variableFeature,web.enableImportByCpp,web.recycleBinClear,web.enableComponentRelevancy,web.enableD2CFeature,web.prototypeDevModeAnnotation,web.oldAiFeatureOffline'.split(',') }),
+            }).then(resProxy);
+            MASTER_PRELOAD['userSettings'] = fetch('/api/v1/users/settings', {
+              headers: seatManagerHeader,
+            }).then(resProxy);
+            MASTER_PRELOAD['userOrg'] = fetch('/api/v1/organizations', {
+              headers: seatManagerHeader,
+            }).then(resProxy);
+          }
+        });
+
+        window.MASTER_PRELOAD = MASTER_PRELOAD;
+      })();</script><script>try{performance.measure("mg/onceLifecycle_htmlHead")}catch(e){}</script><style>:root{--width-skeleton-screen-left:240px;--width-skeleton-screen-right:252px;--height-skeleton-screen-header:42px;--height-skeleton-screen-nav:42px;--height-skeleton-screen-left-middle:168px;--color-skeleton-screen-black-100:rgb(var(--color-skeleton-screen-black-100-value));--color-skeleton-screen-home-background:var(--color-skeleton-screen-home-background-100);--color-skeleton-screen-home-background-menu:var(--color-skeleton-screen-home-background-menu-100);--color-skeleton-screen-home-background-block:var(--color-skeleton-screen-home-background-block-100)}html.dark{--color-skeleton-screen-black-100-value:33,33,33;--color-skeleton-screen-black-200:#2b2b2b;--color-skeleton-screen-home-background-100:#212121;--color-skeleton-screen-home-background-menu-100:#2e2e2e;--color-skeleton-screen-home-background-block-100:rgba(255, 255, 255, 0.06)}html.light{--color-skeleton-screen-black-100-value:255,255,255;--color-skeleton-screen-black-200:#f0f0f0;--color-skeleton-screen-home-background-100:#ffffff;--color-skeleton-screen-home-background-menu-100:#f5f5f5;--color-skeleton-screen-home-background-block-100:rgba(0, 0, 0, 0.04)}.file-skeleton-screen{position:absolute;z-index:10000;top:0;right:0;bottom:0;left:0;overflow:hidden;display:flex;flex-direction:column;background-color:var(--color-skeleton-screen-black-200)}.file-skeleton-screen .skeleton_screen_editpage_top{width:100%;height:var(--height-skeleton-screen-header);background-color:var(--color-skeleton-screen-black-100);overflow:hidden}.file-skeleton-screen .skeleton_screen_editpage_bottom{flex:1;margin-top:1px;width:100%;display:flex}.file-skeleton-screen .skeleton_screen_editpage_bottom_left,.file-skeleton-screen .skeleton_screen_editpage_bottom_right{height:100%;display:flex;flex-direction:column;overflow:hidden}.file-skeleton-screen .skeleton_screen_editpage_bottom_middle{flex:1;display:flex;flex-direction:column;margin:0 1px}.file-skeleton-screen .skeleton_screen_editpage_bottom_middle .skeleton_screen_editpage_bottom_middle_logo{position:fixed;z-index:100;top:calc(50vh - 83px);left:calc(50vw - 7px);transform:translate(-50%,-50%)}.file-skeleton-screen .skeleton_screen_editpage_bottom_right{width:var(--width-skeleton-screen-right)}.file-skeleton-screen .skeleton_screen_editpage_bottom_left{width:var(--width-skeleton-screen-left)}.file-skeleton-screen .skeleton_screen_editpage_bottom_left_middle,.file-skeleton-screen .skeleton_screen_editpage_bottom_left_top,.file-skeleton-screen .skeleton_screen_editpage_bottom_middle_top,.file-skeleton-screen .skeleton_screen_editpage_bottom_right_top{width:100%;height:var(--height-skeleton-screen-header);background-color:var(--color-skeleton-screen-black-100);margin-bottom:1px}.file-skeleton-screen .skeleton_screen_editpage_bottom_middle_top{height:var(--height-skeleton-screen-nav)}.file-skeleton-screen .skeleton_screen_editpage_bottom_left_middle{height:var(--height-skeleton-screen-left-middle)}.file-skeleton-screen .skeleton_screen_editpage_bottom_left_bottom,.file-skeleton-screen .skeleton_screen_editpage_bottom_middle_bottom,.file-skeleton-screen .skeleton_screen_editpage_bottom_right_bottom{width:100%;flex:1;background-color:var(--color-skeleton-screen-black-100)}.file-skeleton-screen .skeleton_screen_editpage_bottom_middle_bottom{background-color:var(--color-skeleton-screen-black-200)}@media screen and (max-width:875px){:root{--width-skeleton-screen-left:0;--width-skeleton-screen-right:0;--height-skeleton-screen-header:0;--height-skeleton-screen-left-middle:0}.file-skeleton-screen .skeleton_screen_editpage_bottom_middle .skeleton_screen_editpage_bottom_middle_logo{position:fixed;z-index:100;top:calc(50vh + 7px);left:50vw;transform:translate(-50%,-50%)}}.skeleton-screen-homepage-content-files-header{margin:52px 0 22px;width:76px;height:21px;border-radius:4px;background:var(--color-skeleton-screen-home-background-block)}.skeleton-screen-homepage-content-files{display:grid;grid-template-columns:repeat(auto-fit,272px);column-gap:25px;row-gap:19px;margin-right:2px}.skeleton-screen-homepage-content-files-item{display:grid;grid-template-rows:158px 16px 16px;row-gap:11px}.skeleton-screen-homepage-content-files-item-line0{width:272px;border-radius:6px;background:var(--color-skeleton-screen-home-background-block)}.skeleton-screen-homepage-content-files-item-line1{width:136px;border-radius:4px;background:var(--color-skeleton-screen-home-background-block)}.skeleton-screen-homepage-content-files-item-line2{width:74px;border-radius:4px;background:var(--color-skeleton-screen-home-background-block)}#team-content{display:none}.skeleton-screen-homepage-content-team{margin:33px calc(216px - 36px) auto calc(160px - 36px)}.skeleton-screen-homepage-content-team-header{display:grid;grid-template-columns:95px 1fr;grid-template-rows:48px 47px;column-gap:27px}.skeleton-screen-homepage-content-team-header-avatar{grid-row-start:1;grid-row-end:3;border-radius:50%;background:var(--color-skeleton-screen-home-background-block)}.skeleton-screen-homepage-content-team-header-title{width:193px;height:34px;border-radius:6px;background:var(--color-skeleton-screen-home-background-block);align-self:flex-end}.skeleton-screen-homepage-content-team-header-desc{width:95px;height:24px;border-radius:6px;background:var(--color-skeleton-screen-home-background-block);align-self:center}.skeleton-screen-homepage-content-team-tabbtns{margin-top:28px;display:grid;grid-template-columns:repeat(3,50px) 1fr;column-gap:20px}.skeleton-screen-homepage-content-team-tab-btn{width:50px;height:20px;background:var(--color-skeleton-screen-home-background-block);border-radius:4px}.skeleton-screen-homepage-content-team-right-btn{justify-self:end;width:70px;height:20px;background:var(--color-skeleton-screen-home-background-block);border-radius:4px}.skeleton-screen-homepage-content-team-btn{margin:26px 0 21px 0;width:65px;height:21px;border-radius:4px;background:var(--color-skeleton-screen-home-background-block)}.skeleton-screen-homepage-content-team-files{display:grid;grid-template-columns:repeat(3,1fr);column-gap:24px}.skeleton-screen-homepage-content-team-file{min-width:272px;height:158px;border-radius:6px;background:var(--color-skeleton-screen-home-background-block)}.skeleton-screen-homepage-menu-hr{margin:13px 9px 12px;height:0;border:1px solid var(--color-skeleton-screen-home-background-block)}.skeleton-screen-homepage-menu-item{height:36px;display:flex;align-items:center}.skeleton-screen-homepage-menu-item-circle{border-radius:50%;background:var(--color-skeleton-screen-home-background-block);width:20px;height:20px;margin:0 15px 0 21px;opacity:0}.skeleton-screen-homepage-menu-item-line{width:65px;background:var(--color-skeleton-screen-home-background-block);height:16px;border-radius:4px}.nav-new{--height-skeleton-screen-nav:0px}</style><script>var theme=window.localStorage.getItem("themeColor");theme&&(window.document.documentElement.className=theme),window.document.documentElement.classList.add("nav-new")</script><script>var title=document.createElement("title"),head=document.head||document.getElementsByTagName("head")[0],env="prod";/electron/i.test(navigator.userAgent.toUpperCase())?"en-US"===lang?title.innerText="Loading…":title.innerText="加载中...":title.innerText="pri"===env?"":"MasterGo",head.appendChild(title)</script><link href="https://static.mastergo.com/static/css/app.680d3419.css" rel="preload" as="style"><link href="https://static.mastergo.com/static/css/chunk-libs-master.c8999731.css" rel="preload" as="style"><link href="https://static.mastergo.com/static/css/chunk-libs.c4a7122d.css" rel="preload" as="style"><link href="https://static.mastergo.com/static/js/app.598c0fb0.js" rel="preload" as="script"><link href="https://static.mastergo.com/static/js/chunk-libs-master.2a9373e9.js" rel="preload" as="script"><link href="https://static.mastergo.com/static/js/chunk-libs.c67eed04.js" rel="preload" as="script"><link href="https://static.mastergo.com/static/js/runtime.db10bbf9.js" rel="preload" as="script"><link href="https://static.mastergo.com/static/css/chunk-libs.c4a7122d.css" rel="stylesheet"><link href="https://static.mastergo.com/static/css/chunk-libs-master.c8999731.css" rel="stylesheet"><link href="https://static.mastergo.com/static/css/app.680d3419.css" rel="stylesheet"></head><body>
+    <div id="file-loading" class="file-skeleton-screen">
+      <div class="skeleton_screen_editpage_top"></div>
+        <div class="skeleton_screen_editpage_bottom">
+          <div class="skeleton_screen_editpage_bottom_left">
+            <div class="skeleton_screen_editpage_bottom_left_top"></div>
+            <div class="skeleton_screen_editpage_bottom_left_middle"></div>
+            <div class="skeleton_screen_editpage_bottom_left_bottom"></div>
+          </div>
+          <div class="skeleton_screen_editpage_bottom_middle">
+              <svg class="skeleton_screen_editpage_bottom_middle_logo" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" fill="none" version="1.1" width="78" height="78" viewBox="0 0 90 90"><clipPath id="master_svg_0"><rect x="0" y="0" width="90" height="90" rx="0"/></clipPath><g clip-path="url(#master_svg_0)" style="mix-blend-mode:passthrough"><g><g style="mix-blend-mode:passthrough"><path d="M1.0628110390624999,64.62383920898438C1.0628110390624999,64.62383920898438,24.9671400390625,18.256949208984373,24.9671400390625,18.256949208984373C27.1615400390625,14.000549208984374,33.2127400390625,13.903629208984375,35.5423400390625,18.087549208984374C35.5423400390625,18.087549208984374,61.2589400390625,64.27463920898438,61.2589400390625,64.27463920898438C63.8611400390625,68.94813920898437,59.5093400390625,74.43323920898438,54.3665400390625,72.96213920898438C54.3665400390625,72.96213920898438,33.1839400390625,66.90253920898436,33.1839400390625,66.90253920898436C32.1060400390625,66.59423920898438,30.9633400390625,66.59403920898438,29.8854400390625,66.90203920898438C29.8854400390625,66.90203920898438,8.044150039062501,73.14233920898437,8.044150039062501,73.14233920898437C2.9904000390625,74.58633920898438,-1.3456499609375,69.29543920898438,1.0628110390624999,64.62383920898438C1.0628110390624999,64.62383920898438,1.0628110390624999,64.62383920898438,1.0628110390624999,64.62383920898438Z" fill="#3970E3" fill-opacity="1"/></g><g style="mix-blend-mode:passthrough"><path d="M72.2350287109375,70.13737817382813L82.1094287109375,72.96207817382813C87.2522287109375,74.43317817382813,91.6040287109375,68.94807817382812,89.0017287109375,64.27457817382813L63.2852287109375,18.087488173828124C60.9556287109375,13.903568173828125,54.9043787109375,14.000488173828124,52.7099787109375,18.256888173828123L48.4769759785375,26.467578173828123L72.2350287109375,70.13737817382813Z" fill-rule="evenodd" fill="#3970E3" fill-opacity="0.5"/></g></g></g></svg>
+            <div class="skeleton_screen_editpage_bottom_middle_top"></div>
+            <div class="skeleton_screen_editpage_bottom_middle_bottom">
+            </div>
+          </div>
+          <div class="skeleton_screen_editpage_bottom_right">
+            <div class="skeleton_screen_editpage_bottom_right_top"></div>
+            <div class="skeleton_screen_editpage_bottom_right_bottom"></div>
+          </div>
+        </div>
+    </div>
+  <div id="app"></div><script type="text/javascript" src="https://static.mastergo.com/static/js/chunk-libs.c67eed04.js"></script><script type="text/javascript" src="https://static.mastergo.com/static/js/chunk-libs-master.2a9373e9.js"></script><script type="text/javascript" src="https://static.mastergo.com/static/js/runtime.db10bbf9.js"></script><script type="text/javascript" src="https://static.mastergo.com/static/js/app.598c0fb0.js"></script></body></html>

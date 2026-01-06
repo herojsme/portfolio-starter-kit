@@ -1,0 +1,959 @@
+<!DOCTYPE html><html lang="zh-CN"><head>
+  <meta charset="UTF-8">
+  <title>工业控制系统界面</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://code.iconify.design/3/3.1.1/iconify.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+  <style>
+    body {
+      background: linear-gradient(135deg, #37474F 0%, #263238 100%);
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      padding: 20px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 35px;
+    }
+    
+    .page-container {
+      width: 1440px;
+      height: 800px;
+      background-color: #ECEFF1;
+      border-radius: 4px;
+      overflow: hidden;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+    
+    /* 通用样式 */
+    .app-header {
+      height: 60px;
+      background-color: #1976D2;
+      color: white;
+      padding: 0 20px;
+      display: flex;
+      align-items: center;
+      font-weight: 700;
+      font-size: 20px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    
+    .sidebar {
+      width: 200px;
+      background-color: #455A64;
+      position: absolute;
+      top: 60px;
+      bottom: 40px;
+      color: white;
+      padding-top: 20px;
+    }
+    
+    .sidemenu-item {
+      padding: 12px 20px;
+      border-bottom: 1px solid #546E7A;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    
+    .sidemenu-item:hover {
+      background-color: #546E7A;
+    }
+    
+    .sidemenu-item.active {
+      background-color: #37474F;
+      border-left: 4px solid #1976D2;
+    }
+    
+    .footer-bar {
+      height: 40px;
+      background-color: #37474F;
+      color: #B0BEC5;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 20px;
+      font-size: 14px;
+    }
+    
+    .main-content {
+      margin-left: 200px;
+      padding: 20px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    
+    /* 图像检测窗口 */
+    .image-grid {
+      display: flex;
+      gap: 20px;
+      height: 60%;
+      margin-bottom: 20px;
+    }
+    
+    .image-window {
+      flex: 1;
+      background: #263238;
+      border: 1px solid #607D8B;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    
+    .meter-overlay {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      color: #B0BEC5;
+      font-size: 12px;
+    }
+    
+    /* 检测数据面板 */
+    .data-panel {
+      flex: 1;
+      background-color: white;
+      border: 1px solid #B0BEC5;
+      display: flex;
+      flex-wrap: wrap;
+      padding: 15px;
+      gap: 15px;
+      border-radius: 4px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+    
+    .data-card {
+      flex: 0 0 calc(25% - 15px);
+      min-width: 200px;
+      padding: 15px;
+      border-radius: 4px;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+    }
+    
+    .data-label {
+      font-size: 14px;
+      margin-bottom: 8px;
+    }
+    
+    .data-value {
+      font-weight: bold;
+      font-size: 22px;
+      font-family: 'Courier New', monospace;
+    }
+    
+    .status-ok {
+      background-color: #4CAF50;
+    }
+    
+    .status-warning {
+      background-color: #FFC107;
+      color: #333;
+    }
+    
+    .status-error {
+      background-color: #F44336;
+    }
+    
+    .control-panel {
+      position: absolute;
+      right: 20px;
+      top: 90px;
+      width: 300px;
+      background: white;
+      padding: 20px;
+      border-radius: 4px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+      border: 1px solid #607D8B;
+      z-index: 10;
+    }
+    
+    /* 日志界面样式 */
+    .filter-bar {
+      padding: 10px 15px;
+      background-color: #f8f9fa;
+      border: 1px solid #dee2e6;
+      border-radius: 4px;
+      margin-bottom: 20px;
+      display: flex;
+      gap: 15px;
+    }
+    
+    .log-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    
+    .log-table th {
+      background-color: #455A64;
+      color: white;
+      text-align: left;
+      padding: 12px 15px;
+      font-weight: 600;
+    }
+    
+    .log-table td {
+      padding: 12px 15px;
+      border-bottom: 1px solid #dee2e6;
+    }
+    
+    .log-table tr:hover {
+      background-color: #f8f9fa;
+    }
+    
+    /* 参数调整界面样式 */
+    .param-group {
+      margin-bottom: 25px;
+      border: 1px solid #B0BEC5;
+      border-radius: 4px;
+      padding: 20px;
+      background-color: white;
+    }
+    
+    .param-title {
+      margin-top: 0;
+      margin-bottom: 20px;
+      color: #37474F;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .slider-container {
+      display: flex;
+      gap: 20px;
+    }
+    
+    .slider-box {
+      flex: 1;
+    }
+    
+    .control-label {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 8px;
+      color: #546E7A;
+      font-size: 14px;
+    }
+    
+    .value-display {
+      background: #F5F5F5;
+      padding: 5px 10px;
+      border-radius: 4px;
+      font-weight: 500;
+    }
+    
+    .slider {
+      width: 100%;
+      height: 8px;
+      -webkit-appearance: none;
+      background: #B0BEC5;
+      border-radius: 4px;
+    }
+    
+    .slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: #1976D2;
+      cursor: pointer;
+    }
+    
+    .btn-run-test {
+      background: #1976D2;
+      color: white;
+      border: none;
+      padding: 12px 30px;
+      font-weight: 600;
+      font-size: 16px;
+      border-radius: 4px;
+      cursor: pointer;
+      box-shadow: 0 3px 6px rgba(0,0,0,0.16);
+      width: 100%;
+      margin-top: 20px;
+      transition: all 0.3s;
+    }
+    
+    .btn-run-test:hover {
+      background: #1565C0;
+      transform: translateY(-2px);
+    }
+    
+    /* 模板界面样式 */
+    .template-container {
+      display: flex;
+      gap: 20px;
+      height: 80%;
+    }
+    
+    .form-section {
+      flex: 0.4;
+    }
+    
+    .preview-section {
+      flex: 0.6;
+      background: #263238;
+      border: 1px solid #607D8B;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+    
+    .btn-group {
+      display: flex;
+      gap: 15px;
+      margin-top: 20px;
+    }
+    
+    .template-btn {
+      flex: 1;
+      padding: 12px;
+      border: none;
+      border-radius: 4px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    
+    .btn-save {
+      background: #1976D2;
+      color: white;
+    }
+    
+    .btn-cancel {
+      background: #F5F5F5;
+      color: #37474F;
+    }
+    
+    /* 通讯界面样式 */
+    .com-container {
+      display: flex;
+      height: 80%;
+      gap: 30px;
+    }
+    
+    .config-form {
+      flex: 0.5;
+    }
+    
+    .status-container {
+      flex: 0.5;
+      background: white;
+      border-radius: 4px;
+      padding: 25px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+    }
+    
+    .led-indicator {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      background: #616161;
+      position: relative;
+      box-shadow: inset 0 5px 10px rgba(0,0,0,0.3);
+      border: 2px solid #B0BEC5;
+      margin-bottom: 25px;
+    }
+    
+    .led-active {
+      background: radial-gradient(circle, #76FF03, #1B5E20);
+      box-shadow: 
+        0 0 30px #64DD17,
+        inset 0 0 20px rgba(255,255,255,0.5);
+    }
+  </style>
+</head>
+<body>
+  <!-- 主界面 -->
+  <div class="page-container">
+    <div class="app-header">
+      <span class="iconify mr-2" data-icon="mdi:factory" style="font-size: 28px;"></span>
+      工控系统 - 检测主界面
+    </div>
+    
+    <div class="sidebar">
+      <div class="sidemenu-item active">
+        <span class="iconify mr-2" data-icon="ic:round-dashboard"></span>
+        主界面
+      </div>
+      <div class="sidemenu-item">
+        <span class="iconify mr-2" data-icon="mdi:clipboard-list-outline"></span>
+        检测日志
+      </div>
+      <div class="sidemenu-item">
+        <span class="iconify mr-2" data-icon="mdi:cog-outline"></span>
+        参数调整
+      </div>
+      <div class="sidemenu-item">
+        <span class="iconify mr-2" data-icon="mdi:image-edit-outline"></span>
+        模板调整
+      </div>
+      <div class="sidemenu-item">
+        <span class="iconify mr-2" data-icon="mdi:lan-connect"></span>
+        设备通讯
+      </div>
+    </div>
+    
+    <div class="main-content">
+      <div class="image-grid">
+        <div class="image-window">
+          <div class="meter-overlay">检测区域: 25.3mm x 75.4mm | 缩放: 1.2x</div>
+          <img src="https://modao.cc/ai/uploads/ai_pics/16/168603/aigp_1756082729.jpeg" alt="Size detection visual diagram" id="1" style="max-width: 90%; max-height: 85%;">
+        </div>
+        <div class="image-window">
+          <div class="meter-overlay">检测区域: 45.7mm x 62.1mm | 缩放: 0.8x</div>
+          <img src="https://modao.cc/ai/uploads/ai_pics/16/168604/aigp_1756082730.jpeg" alt="Dust detection visual diagram" id="2" style="max-width: 90%; max-height: 85%;">
+        </div>
+      </div>
+      
+      <div class="data-panel">
+        <div class="data-card status-ok">
+          <div class="data-label">尺寸合格率</div>
+          <div class="data-value">98.73%</div>
+          <div>标准范围: 95-99%</div>
+        </div>
+        
+        <div class="data-card status-warning">
+          <div class="data-label">灰尘指数</div>
+          <div class="data-value">0.27μm</div>
+          <div>临界点: 0.25μm</div>
+        </div>
+        
+        <div class="data-card status-ok">
+          <div class="data-label">装配精度</div>
+          <div class="data-value">99.51%</div>
+          <div>标准: &gt;98.5%</div>
+        </div>
+        
+        <div class="data-card status-error">
+          <div class="data-label">缺陷检测</div>
+          <div class="data-value">NG</div>
+          <div>定位: A区模块4</div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="control-panel">
+      <h3 class="text-lg font-bold mb-4 text-gray-700">检测控制面板</h3>
+      <div class="space-y-4">
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">检测模式</label>
+          <div class="flex gap-2">
+            <button class="flex-1 bg-blue-100 hover:bg-blue-200 text-blue-800 py-2 rounded border border-blue-300">自动测试</button>
+            <button class="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 py-2 rounded border border-gray-300">手动测试</button>
+          </div>
+        </div>
+        
+        <div>
+          <div class="flex justify-between mb-1">
+            <span class="font-medium text-gray-700">检测速度</span>
+            <span class="font-medium text-blue-600">中速</span>
+          </div>
+          <input type="range" class="slider" min="0" max="100" value="50">
+        </div>
+        
+        <button class="mt-4 w-full py-3 bg-green-600 hover:bg-green-700 text-white font-bold rounded-md shadow-lg flex items-center justify-center">
+          <span class="iconify mr-2" data-icon="mdi:check-circle-outline" style="font-size: 20px;"></span>
+          完成检测
+        </button>
+      </div>
+    </div>
+    
+    <div class="footer-bar">
+      <div>系统状态: <span class="text-green-400 ml-2">运行中</span></div>
+      <div>在线设备: PLC-01 | 视觉检测器-02 | 传送装置-C</div>
+      <div>系统时间: 2025-08-25 14:35:21</div>
+    </div>
+  </div>
+  
+  <!-- 日志界面 -->
+  <div class="page-container">
+    <div class="app-header">
+      <span class="iconify mr-2" data-icon="mdi:clipboard-list-outline" style="font-size: 28px;"></span>
+      检测日志与事件
+    </div>
+    
+    <div class="sidebar">
+      <div class="sidemenu-item">
+        <span class="iconify mr-2" data-icon="ic:round-dashboard"></span>
+        主界面
+      </div>
+      <div class="sidemenu-item active">
+        <span class="iconify mr-2" data-icon="mdi:clipboard-list-outline"></span>
+        检测日志
+      </div>
+      <div class="sidemenu-item">
+        <span class="iconify mr-2" data-icon="mdi:cog-outline"></span>
+        参数调整
+      </div>
+      <div class="sidemenu-item">
+        <span class="iconify mr-2" data-icon="mdi:image-edit-outline"></span>
+        模板调整
+      </div>
+      <div class="sidemenu-item">
+        <span class="iconify mr-2" data-icon="mdi:lan-connect"></span>
+        设备通讯
+      </div>
+    </div>
+    
+    <div class="main-content">
+      <div class="filter-bar">
+        <div class="flex-1">
+          <label class="block text-sm font-medium mb-1">日期范围</label>
+          <div class="flex gap-2">
+            <input type="date" class="border rounded px-3 py-1 w-full" value="2025-08-20">
+            <span class="self-center">至</span>
+            <input type="date" class="border rounded px-3 py-1 w-full" value="2025-08-25">
+          </div>
+        </div>
+        
+        <div>
+          <label class="block text-sm font-medium mb-1">事件类型</label>
+          <select class="border rounded px-3 py-1 w-40">
+            <option>全部类型</option>
+            <option>缺陷检测</option>
+            <option>尺寸异常</option>
+            <option>设备故障</option>
+          </select>
+        </div>
+        
+        <button class="self-end bg-blue-600 hover:bg-blue-700 text-white px-4 py-1 rounded font-medium">
+          查询
+        </button>
+      </div>
+      
+      <table class="log-table">
+        <thead>
+          <tr>
+            <th>时间戳</th>
+            <th>事件类型</th>
+            <th>位置</th>
+            <th>详细描述</th>
+            <th>操作者</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>2025-08-25 14:28:32</td>
+            <td><span class="text-red-600">缺陷检测</span></td>
+            <td>生产线04-A区</td>
+            <td>表面裂纹超过阈值 (标准:0.2mm, 实际:0.35mm)</td>
+            <td>系统自动记录</td>
+          </tr>
+          <tr>
+            <td>2025-08-25 10:15:47</td>
+            <td><span class="text-yellow-600">尺寸异常</span></td>
+            <td>生产线02-C区</td>
+            <td>孔位偏差超标 (允许:±0.05mm, 实际:0.08mm)</td>
+            <td>质检员#0078</td>
+          </tr>
+          <tr>
+            <td>2025-08-24 16:42:19</td>
+            <td><span class="text-red-600">设备故障</span></td>
+            <td>视觉检测器-02</td>
+            <td>相机对焦异常 (错误代码: VF_ERR-204)</td>
+            <td>工程师#0210</td>
+          </tr>
+          <tr>
+            <td>2025-08-24 09:13:05</td>
+            <td><span class="text-green-600">系统日志</span></td>
+            <td>中央控制台</td>
+            <td>日常维护已完成 00:03:14</td>
+            <td>维护#AUTO</td>
+          </tr>
+          <tr>
+            <td>2025-08-23 18:30:57</td>
+            <td><span class="text-blue-600">参数调整</span></td>
+            <td>生产线01-B区</td>
+            <td>公差标准更新 (新值: 0.04mm~0.07mm)</td>
+            <td>工程师#0203</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    
+    <div class="footer-bar">
+      <div>当前记录总数: 327 条</div>
+      <div>最后更新时间: 2025-08-25 14:28:32</div>
+    </div>
+  </div>
+  
+  <!-- 参数调整界面 -->
+  <div class="page-container">
+    <div class="app-header">
+      <span class="iconify mr-2" data-icon="mdi:cog-outline" style="font-size: 28px;"></span>
+      系统参数配置
+    </div>
+    
+    <div class="sidebar">
+      <div class="sidemenu-item">
+        <span class="iconify mr-2" data-icon="ic:round-dashboard"></span>
+        主界面
+      </div>
+      <div class="sidemenu-item">
+        <span class="iconify mr-2" data-icon="mdi:clipboard-list-outline"></span>
+        检测日志
+      </div>
+      <div class="sidemenu-item active">
+        <span class="iconify mr-2" data-icon="mdi:cog-outline"></span>
+        参数调整
+      </div>
+      <div class="sidemenu-item">
+        <span class="iconify mr-2" data-icon="mdi:image-edit-outline"></span>
+        模板调整
+      </div>
+      <div class="sidemenu-item">
+        <span class="iconify mr-2" data-icon="mdi:lan-connect"></span>
+        设备通讯
+      </div>
+    </div>
+    
+    <div class="main-content">
+      <div class="param-group">
+        <h3 class="param-title">
+          <span class="iconify" data-icon="mdi:camera-outline"></span>
+          相机参数设置
+        </h3>
+        
+        <div class="slider-container">
+          <div class="slider-box">
+            <div class="control-label">
+              <span>曝光时间</span>
+              <span class="value-display">25ms</span>
+            </div>
+            <input type="range" class="slider" min="5" max="100" value="25">
+          </div>
+          
+          <div class="slider-box">
+            <div class="control-label">
+              <span>增益系数</span>
+              <span class="value-display">0.68</span>
+            </div>
+            <input type="range" class="slider" min="0" max="2" step="0.01" value="0.68">
+          </div>
+        </div>
+        
+        <div class="control-label mt-8 mb-2">
+          <span>白平衡模式</span>
+        </div>
+        <div class="flex gap-3">
+          <button class="flex-1 bg-blue-100 border border-blue-300 py-2 rounded text-blue-800 font-medium">自动调整</button>
+          <button class="flex-1 bg-gray-100 border border-gray-300 py-2 rounded text-gray-700">手动配置</button>
+        </div>
+      </div>
+      
+      <div class="param-group">
+        <h3 class="param-title">
+          <span class="iconify" data-icon="mdi:ruler"></span>
+          检测参数设置
+        </h3>
+        
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="block text-sm font-medium mb-1">灰度阈值下限</label>
+            <div class="flex">
+              <input type="number" class="border rounded-l p-2 w-full" value="40">
+              <div class="bg-gray-200 px-3 flex items-center border-t border-b border-r rounded-r">Pts</div>
+            </div>
+          </div>
+          
+          <div>
+            <label class="block text-sm font-medium mb-1">灰度阈值上限</label>
+            <div class="flex">
+              <input type="number" class="border rounded-l p-2 w-full" value="195">
+              <div class="bg-gray-200 px-3 flex items-center border-t border-b border-r rounded-r">Pts</div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="mt-4">
+          <label class="block text-sm font-medium mb-1">物料类型</label>
+          <select class="border rounded px-3 py-2 w-full">
+            <option>金属件 A型</option>
+            <option>塑料件 B型</option>
+            <option>复合材料 C型</option>
+            <option>定制材料 D型</option>
+          </select>
+        </div>
+      </div>
+      
+      <button class="btn-run-test">
+        <span class="iconify mr-2" data-icon="mdi:play-circle-outline"></span>
+        运行测试检测
+      </button>
+    </div>
+    
+    <div class="footer-bar">
+      <div class="flex items-center gap-2">
+        <span class="w-3 h-3 bg-green-500 rounded-full"></span>
+        参数应用状态: <span class="text-green-400 ml-1">已保存</span>
+      </div>
+      <div>当前模板: 通用检测标准 V2.3</div>
+    </div>
+  </div>
+  
+  <!-- 模板调整界面 -->
+  <div class="page-container">
+    <div class="app-header">
+      <span class="iconify mr-2" data-icon="mdi:image-edit-outline" style="font-size: 28px;"></span>
+      检测模板编辑
+    </div>
+    
+    <div class="sidebar">
+      <div class="sidemenu-item">
+        <span class="iconify mr-2" data-icon="ic:round-dashboard"></span>
+        主界面
+      </div>
+      <div class="sidemenu-item">
+        <span class="iconify mr-2" data-icon="mdi:clipboard-list-outline"></span>
+        检测日志
+      </div>
+      <div class="sidemenu-item">
+        <span class="iconify mr-2" data-icon="mdi:cog-outline"></span>
+        参数调整
+      </div>
+      <div class="sidemenu-item active">
+        <span class="iconify mr-2" data-icon="mdi:image-edit-outline"></span>
+        模板调整
+      </div>
+      <div class="sidemenu-item">
+        <span class="iconify mr-2" data-icon="mdi:lan-connect"></span>
+        设备通讯
+      </div>
+    </div>
+    
+    <div class="main-content">
+      <div class="template-container">
+        <div class="form-section">
+          <div class="mb-6">
+            <label class="block text-lg font-medium mb-2">模板名称</label>
+            <input type="text" class="border rounded w-full p-2" value="新型号G85检测模板">
+          </div>
+          
+          <div class="mb-6">
+            <label class="block text-lg font-medium mb-2">检测区域</label>
+            <div class="grid grid-cols-2 gap-4">
+              <div>
+                <label class="block text-sm mb-1">位置X</label>
+                <input type="text" class="border rounded w-full p-2" value="125px">
+              </div>
+              <div>
+                <label class="block text-sm mb-1">位置Y</label>
+                <input type="text" class="border rounded w-full p-2" value="240px">
+              </div>
+              <div>
+                <label class="block text-sm mb-1">宽度</label>
+                <input type="text" class="border rounded w-full p-2" value="350px">
+              </div>
+              <div>
+                <label class="block text-sm mb-1">高度</label>
+                <input type="text" class="border rounded w-full p-2" value="180px">
+              </div>
+            </div>
+          </div>
+          
+          <div class="mb-6">
+            <label class="block text-lg font-medium mb-2">特征点设置</label>
+            <div class="space-y-3">
+              <div class="flex items-center gap-2">
+                <input type="checkbox" class="w-4 h-4" checked="">
+                <span>边缘轮廓分析</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <input type="checkbox" class="w-4 h-4" checked="">
+                <span>表面缺陷识别</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <input type="checkbox" class="w-4 h-4">
+                <span>孔径角度检测</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <input type="checkbox" class="w-4 h-4" checked="">
+                <span>字符识别</span>
+              </div>
+            </div>
+          </div>
+          
+          <div class="btn-group">
+            <button class="template-btn btn-cancel">重置修改</button>
+            <button class="template-btn btn-save">应用模板</button>
+          </div>
+        </div>
+        
+        <div class="preview-section">
+          <div class="w-full h-4/5 flex items-center justify-center relative">
+            <img src="https://modao.cc/ai/uploads/ai_pics/16/168605/aigp_1756082732.jpeg" alt="Template preview image" id="3" class="max-w-full max-h-full">
+          </div>
+          <div class="absolute bottom-4 text-gray-400 text-sm">注: 红色区域为检测范围标识</div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="footer-bar">
+      <div>当前模板版本: v1.0</div>
+      <div>编辑器状态: 已加载</div>
+    </div>
+  </div>
+  
+  <!-- 通讯界面 -->
+  <div class="page-container">
+    <div class="app-header">
+      <span class="iconify mr-2" data-icon="mdi:lan-connect" style="font-size: 28px;"></span>
+      设备通讯配置
+    </div>
+    
+    <div class="sidebar">
+      <div class="sidemenu-item">
+        <span class="iconify mr-2" data-icon="ic:round-dashboard"></span>
+        主界面
+      </div>
+      <div class="sidemenu-item">
+        <span class="iconify mr-2" data-icon="mdi:clipboard-list-outline"></span>
+        检测日志
+      </div>
+      <div class="sidemenu-item">
+        <span class="iconify mr-2" data-icon="mdi:cog-outline"></span>
+        参数调整
+      </div>
+      <div class="sidemenu-item">
+        <span class="iconify mr-2" data-icon="mdi:image-edit-outline"></span>
+        模板调整
+      </div>
+      <div class="sidemenu-item active">
+        <span class="iconify mr-2" data-icon="mdi:lan-connect"></span>
+        设备通讯
+      </div>
+    </div>
+    
+    <div class="main-content">
+      <div class="com-container">
+        <div class="config-form">
+          <h3 class="text-xl font-bold border-b pb-2 mb-6 text-gray-700">PLC通讯设置</h3>
+          
+          <div class="space-y-6">
+            <div>
+              <label class="block text-lg font-medium mb-2">端口配置</label>
+              <div class="grid grid-cols-2 gap-4">
+                <div>
+                  <label class="block text-sm mb-1">通讯端口</label>
+                  <select class="border rounded px-3 py-2 w-full">
+                    <option>COM3</option>
+                    <option>COM4</option>
+                    <option>COM5</option>
+                    <option>USB</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="block text-sm mb-1">波特率</label>
+                  <select class="border rounded px-3 py-2 w-full">
+                    <option>9600</option>
+                    <option>19200</option>
+                    <option selected="">38400</option>
+                    <option>57600</option>
+                    <option>115200</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            
+            <div>
+              <label class="block text-lg font-medium mb-2">参数设置</label>
+              <div class="grid grid-cols-2 gap-4">
+                <div>
+                  <label class="block text-sm mb-1">数据位</label>
+                  <select class="border rounded px-3 py-2 w-full">
+                    <option>7位</option>
+                    <option selected="">8位</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="block text-sm mb-1">停止位</label>
+                  <select class="border rounded px-3 py-2 w-full">
+                    <option>1位</option>
+                    <option selected="">2位</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="block text-sm mb-1">校验位</label>
+                  <select class="border rounded px-3 py-2 w-full">
+                    <option>无校验</option>
+                    <option>奇校验</option>
+                    <option selected="">偶校验</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="block text-sm mb-1">流控制</label>
+                  <select class="border rounded px-3 py-2 w-full">
+                    <option selected="">无</option>
+                    <option>XON/XOFF</option>
+                    <option>硬件控制</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            
+            <div>
+              <label class="block text-lg font-medium mb-2">设备地址</label>
+              <input type="text" class="border rounded w-full p-2" value="192.168.2.101">
+            </div>
+            
+            <button class="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded flex items-center justify-center mt-6">
+              <span class="iconify mr-2" data-icon="mdi:connection" style="font-size: 20px;"></span>
+              保存并连接设备
+            </button>
+          </div>
+        </div>
+        
+        <div class="status-container">
+          <div class="led-indicator led-active"></div>
+          <h3 class="text-2xl font-bold mb-2">PLC 连接状态</h3>
+          <p class="text-green-600 text-xl font-medium mb-4">已连接</p>
+          <div class="text-gray-600">设备: SIEMENS S7-1500</div>
+          <div class="text-gray-600 mt-2">IP: 192.168.2.101</div>
+          <div class="text-gray-600 mt-2">接口: COM3 @ 38400bps</div>
+          <div class="text-blue-600 mt-6 font-medium">最后通讯: 2025-08-25 14:33:21</div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="footer-bar">
+      <div>在线设备: PLC-01 | 视觉检测器-02 | 传送装置-C</div>
+      <div>通讯延迟: <span class="text-green-400">18ms</span></div>
+    </div>
+  </div>
+  
+  <script>
+    // ECharts初始化（示例）
+    document.addEventListener('DOMContentLoaded', function () {
+      const charts = document.querySelectorAll('[data-echart]');
+      charts.forEach(el => {
+        const chart = echarts.init(el);
+        chart.setOption({...}); // 实际项目中添加图表配置
+      });
+      
+      // 简单的状态指示器交互
+      document.querySelectorAll('.led-indicator').forEach(led => {
+        led.addEventListener('click', function() {
+          this.classList.toggle('led-active');
+        });
+      });
+    });
+  </script>
+
+</body></html>

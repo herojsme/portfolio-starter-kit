@@ -1,0 +1,9 @@
+{
+  "name": "staticblog",
+  "installCommand": "npm install",
+  "buildCommand": "npm run build",
+  "assets": {
+    "directory": "./out",
+    "notFoundStrategy": "404"
+  }
+}

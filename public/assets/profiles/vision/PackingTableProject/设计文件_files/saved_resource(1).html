@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<!-- saved from url=(0051)https://mastergo.com/file/175672845573842?page_id=M -->
+<html lang="zh-CN" style="overflow: hidden;"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><script>console.warn = () => {};console.log = () => {};</script>
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>纸箱包装管理系统</title>
+  <script src="./saved_resource"></script>
+  <script src="./all.min.css"></script>
+  <script src="./echarts.min.js.下载"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com/">
+  <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="">
+  <link href="./css2" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#3b82f6',
+            secondary: '#60a5fa'
+          },
+          borderRadius: {
+            'none': '0px',
+            'sm': '2px',
+            DEFAULT: '4px',
+            'md': '8px',
+            'lg': '12px',
+            'xl': '16px',
+            '2xl': '20px',
+            '3xl': '24px',
+            'full': '9999px',
+            'button': '4px'
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body {
+      min-height: 1024px;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    .font-logo {
+      font-family: 'Pacifico', cursive;
+    }
+    input[type=number]::-webkit-inner-spin-button,
+    input[type=number]::-webkit-outer-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+    .step-card {
+      transition: all 0.3s ease;
+    }
+    .step-card.active {
+      transform: scale(1.05);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    }
+    .camera-preview {
+      background-image: url('https://ai-public.mastergo.com/gen_page/map_placeholder_1280x720.png');
+      background-size: cover;
+      background-position: center;
+    }
+  </style>
+<script>
+    window.setInterval = () => {};
+    window.clearInterval = () => {};
+    // window.setTimeout = () => {};
+    // window.clearTimeout = () => {};
+  </script><style>
+  html {
+    -ms-overflow-style: none;  /* 适用于 IE 和 Edge */
+    scrollbar-width: none;     /* 适用于 Firefox */
+    &::-webkit-scrollbar {
+      display: none; /* 隐藏滚动条 */
+    }
+  }
+</style><style>
+    /* 自定义滚动条样式 */
+    /* WebKit 浏览器 (Chrome, Safari, Edge) */
+    ::-webkit-scrollbar {
+        width: 0; /* 滚动条宽度 */
+        height: 0; /* 水平滚动条高度 */
+    }
+
+    ::-webkit-scrollbar-track {
+        background: transparent; /* 轨道透明，使内容可见 */
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background-color: rgba(0, 0, 0, 0.5); /* 滚动条滑块颜色 */
+        border-radius: 4px; /* 滑块圆角 */
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+        background-color: rgba(0, 0, 0, 0.7); /* 悬停时颜色 */
+    }
+  </style><script>
+  window.addEventListener('error', (e) => {
+    let target = e.target;
+    const tagName = target.tagName || '';
+    try {
+      if (tagName.toLowerCase() === 'img') {
+        const handler = (event)=>{
+            const generatePlaceholder = window.generatePlaceholder;
+            target.setAttribute('src', generatePlaceholder(target.width, target.height, 'Image'));
+            target.onerror = null;
+        };
+        handler();
+      }
+    } catch (err) {
+      console.error(err);
+      }
+    }, true);
+  </script><style>*, ::before, ::after{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }::backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }/* ! tailwindcss v3.4.17 | MIT License | https://tailwindcss.com */*,::after,::before{box-sizing:border-box;border-width:0;border-style:solid;border-color:#e5e7eb}::after,::before{--tw-content:''}:host,html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;tab-size:4;font-family:ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";font-feature-settings:normal;font-variation-settings:normal;-webkit-tap-highlight-color:transparent}body{margin:0;line-height:inherit}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;font-feature-settings:normal;font-variation-settings:normal;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}button,input,optgroup,select,textarea{font-family:inherit;font-feature-settings:inherit;font-variation-settings:inherit;font-size:100%;font-weight:inherit;line-height:inherit;letter-spacing:inherit;color:inherit;margin:0;padding:0}button,select{text-transform:none}button,input:where([type=button]),input:where([type=reset]),input:where([type=submit]){-webkit-appearance:button;background-color:transparent;background-image:none}:-moz-focusring{outline:auto}:-moz-ui-invalid{box-shadow:none}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre{margin:0}fieldset{margin:0;padding:0}legend{padding:0}menu,ol,ul{list-style:none;margin:0;padding:0}dialog{padding:0}textarea{resize:vertical}input::placeholder,textarea::placeholder{opacity:1;color:#9ca3af}[role=button],button{cursor:pointer}:disabled{cursor:default}audio,canvas,embed,iframe,img,object,svg,video{display:block;vertical-align:middle}img,video{max-width:100%;height:auto}[hidden]:where(:not([hidden=until-found])){display:none}.mx-auto{margin-left:auto;margin-right:auto}.mb-1{margin-bottom:0.25rem}.mb-12{margin-bottom:3rem}.mb-16{margin-bottom:4rem}.mb-2{margin-bottom:0.5rem}.mb-3{margin-bottom:0.75rem}.mb-4{margin-bottom:1rem}.mb-6{margin-bottom:1.5rem}.mr-2{margin-right:0.5rem}.mt-16{margin-top:4rem}.mt-4{margin-top:1rem}.block{display:block}.flex{display:flex}.grid{display:grid}.h-12{height:3rem}.h-16{height:4rem}.h-2\.5{height:0.625rem}.h-32{height:8rem}.h-48{height:12rem}.h-64{height:16rem}.h-80{height:20rem}.w-12{width:3rem}.w-16{width:4rem}.w-24{width:6rem}.w-32{width:8rem}.w-full{width:100%}.max-w-7xl{max-width:80rem}.flex-1{flex:1 1 0%}.grid-cols-2{grid-template-columns:repeat(2, minmax(0, 1fr))}.grid-cols-3{grid-template-columns:repeat(3, minmax(0, 1fr))}.flex-col{flex-direction:column}.items-center{align-items:center}.justify-center{justify-content:center}.justify-between{justify-content:space-between}.gap-6{gap:1.5rem}.gap-8{gap:2rem}.space-x-2 > :not([hidden]) ~ :not([hidden]){--tw-space-x-reverse:0;margin-right:calc(0.5rem * var(--tw-space-x-reverse));margin-left:calc(0.5rem * calc(1 - var(--tw-space-x-reverse)))}.space-x-4 > :not([hidden]) ~ :not([hidden]){--tw-space-x-reverse:0;margin-right:calc(1rem * var(--tw-space-x-reverse));margin-left:calc(1rem * calc(1 - var(--tw-space-x-reverse)))}.space-x-6 > :not([hidden]) ~ :not([hidden]){--tw-space-x-reverse:0;margin-right:calc(1.5rem * var(--tw-space-x-reverse));margin-left:calc(1.5rem * calc(1 - var(--tw-space-x-reverse)))}.space-y-3 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.75rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.75rem * var(--tw-space-y-reverse))}.space-y-6 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1.5rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1.5rem * var(--tw-space-y-reverse))}.overflow-x-auto{overflow-x:auto}.overflow-y-auto{overflow-y:auto}.whitespace-nowrap{white-space:nowrap}.rounded-button{border-radius:4px}.rounded-full{border-radius:9999px}.rounded-lg{border-radius:12px}.rounded-md{border-radius:8px}.rounded-xl{border-radius:16px}.border{border-width:1px}.border-2{border-width:2px}.border-b{border-bottom-width:1px}.border-dashed{border-style:dashed}.border-gray-300{--tw-border-opacity:1;border-color:rgb(209 213 219 / var(--tw-border-opacity, 1))}.border-primary{--tw-border-opacity:1;border-color:rgb(59 130 246 / var(--tw-border-opacity, 1))}.bg-blue-50{--tw-bg-opacity:1;background-color:rgb(239 246 255 / var(--tw-bg-opacity, 1))}.bg-gray-100{--tw-bg-opacity:1;background-color:rgb(243 244 246 / var(--tw-bg-opacity, 1))}.bg-gray-200{--tw-bg-opacity:1;background-color:rgb(229 231 235 / var(--tw-bg-opacity, 1))}.bg-gray-50{--tw-bg-opacity:1;background-color:rgb(249 250 251 / var(--tw-bg-opacity, 1))}.bg-gray-900{--tw-bg-opacity:1;background-color:rgb(17 24 39 / var(--tw-bg-opacity, 1))}.bg-green-100{--tw-bg-opacity:1;background-color:rgb(220 252 231 / var(--tw-bg-opacity, 1))}.bg-primary{--tw-bg-opacity:1;background-color:rgb(59 130 246 / var(--tw-bg-opacity, 1))}.bg-red-500{--tw-bg-opacity:1;background-color:rgb(239 68 68 / var(--tw-bg-opacity, 1))}.bg-white{--tw-bg-opacity:1;background-color:rgb(255 255 255 / var(--tw-bg-opacity, 1))}.bg-yellow-100{--tw-bg-opacity:1;background-color:rgb(254 249 195 / var(--tw-bg-opacity, 1))}.p-2{padding:0.5rem}.p-3{padding:0.75rem}.p-4{padding:1rem}.p-6{padding:1.5rem}.p-8{padding:2rem}.px-4{padding-left:1rem;padding-right:1rem}.px-6{padding-left:1.5rem;padding-right:1.5rem}.px-8{padding-left:2rem;padding-right:2rem}.py-10{padding-top:2.5rem;padding-bottom:2.5rem}.py-2{padding-top:0.5rem;padding-bottom:0.5rem}.py-3{padding-top:0.75rem;padding-bottom:0.75rem}.py-4{padding-top:1rem;padding-bottom:1rem}.py-8{padding-top:2rem;padding-bottom:2rem}.text-left{text-align:left}.text-center{text-align:center}.text-2xl{font-size:1.5rem;line-height:2rem}.text-4xl{font-size:2.25rem;line-height:2.5rem}.text-sm{font-size:0.875rem;line-height:1.25rem}.text-xl{font-size:1.25rem;line-height:1.75rem}.font-bold{font-weight:700}.font-semibold{font-weight:600}.text-gray-400{--tw-text-opacity:1;color:rgb(156 163 175 / var(--tw-text-opacity, 1))}.text-gray-500{--tw-text-opacity:1;color:rgb(107 114 128 / var(--tw-text-opacity, 1))}.text-gray-600{--tw-text-opacity:1;color:rgb(75 85 99 / var(--tw-text-opacity, 1))}.text-gray-700{--tw-text-opacity:1;color:rgb(55 65 81 / var(--tw-text-opacity, 1))}.text-gray-800{--tw-text-opacity:1;color:rgb(31 41 55 / var(--tw-text-opacity, 1))}.text-green-800{--tw-text-opacity:1;color:rgb(22 101 52 / var(--tw-text-opacity, 1))}.text-primary{--tw-text-opacity:1;color:rgb(59 130 246 / var(--tw-text-opacity, 1))}.text-white{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}.text-yellow-800{--tw-text-opacity:1;color:rgb(133 77 14 / var(--tw-text-opacity, 1))}.shadow{--tw-shadow:0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 1px 3px 0 var(--tw-shadow-color), 0 1px 2px -1px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.transition{transition-property:color, background-color, border-color, fill, stroke, opacity, box-shadow, transform, filter, -webkit-text-decoration-color, -webkit-backdrop-filter;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter, -webkit-text-decoration-color, -webkit-backdrop-filter;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.hover\:bg-gray-300:hover{--tw-bg-opacity:1;background-color:rgb(209 213 219 / var(--tw-bg-opacity, 1))}.hover\:bg-red-600:hover{--tw-bg-opacity:1;background-color:rgb(220 38 38 / var(--tw-bg-opacity, 1))}.hover\:bg-secondary:hover{--tw-bg-opacity:1;background-color:rgb(96 165 250 / var(--tw-bg-opacity, 1))}.hover\:text-primary:hover{--tw-text-opacity:1;color:rgb(59 130 246 / var(--tw-text-opacity, 1))}.hover\:underline:hover{-webkit-text-decoration-line:underline;text-decoration-line:underline}</style></head>
+<body class="bg-gray-50 text-gray-800" style="transform-origin: left top;">
+  <!-- 导航栏 -->
+  <header class="bg-gray-900 text-white py-4 px-8 flex justify-between items-center">
+    <div class="flex items-center space-x-4">
+      <div class="font-logo text-2xl">logo</div>
+      <nav class="flex space-x-6">
+        <a href="https://mastergo.com/file/175672845573842?page_id=M#" class="hover:text-primary transition">首页</a>
+        <a href="https://mastergo.com/file/175672845573842?page_id=M#" class="hover:text-primary transition">包装记录</a>
+        <a href="https://mastergo.com/file/175672845573842?page_id=M#" class="hover:text-primary transition">系统设置</a>
+      </nav>
+    </div>
+    <div class="flex items-center space-x-4">
+      <span>操作员：张伟</span>
+      <button class="bg-red-500 hover:bg-red-600 px-4 py-2 rounded-button whitespace-nowrap transition">退出登录</button>
+    </div>
+  </header>
+
+  <!-- 主标题 -->
+  <main class="max-w-7xl mx-auto px-8 py-10">
+    <h1 class="text-4xl font-bold text-center mb-12">纸箱包装管理系统</h1>
+    <!-- 功能流程展示区域 -->
+    <section class="mb-16">
+      <h2 class="text-2xl font-semibold mb-6">包装流程</h2>
+      <div class="flex justify-between space-x-4">
+        <!-- 步骤 1 -->
+        <div class="step-card bg-white p-6 rounded-xl shadow flex flex-col items-center text-center flex-1 border-2 border-primary active">
+          <div class="w-12 h-12 rounded-full bg-primary text-white flex items-center justify-center mb-4">
+            <i class="fas fa-qrcode text-xl"></i>
+          </div>
+          <h3 class="font-semibold mb-2">获取纸箱信息</h3>
+          <p class="text-sm text-gray-600">扫描或输入纸箱条码</p>
+        </div>
+        <!-- 步骤 2 -->
+        <div class="step-card bg-white p-6 rounded-xl shadow flex flex-col items-center text-center flex-1">
+          <div class="w-12 h-12 rounded-full bg-gray-200 text-gray-500 flex items-center justify-center mb-4">
+            <i class="fas fa-print text-xl"></i>
+          </div>
+          <h3 class="font-semibold mb-2">打印并粘贴条码</h3>
+          <p class="text-sm text-gray-600">将条码贴在纸箱上</p>
+        </div>
+        <!-- 步骤 3 -->
+        <div class="step-card bg-white p-6 rounded-xl shadow flex flex-col items-center text-center flex-1">
+          <div class="w-12 h-12 rounded-full bg-gray-200 text-gray-500 flex items-center justify-center mb-4">
+            <i class="fas fa-camera text-xl"></i>
+          </div>
+          <h3 class="font-semibold mb-2">扫描纸箱条码</h3>
+          <p class="text-sm text-gray-600">在打包台扫描纸箱</p>
+        </div>
+        <!-- 步骤 4 -->
+        <div class="step-card bg-white p-6 rounded-xl shadow flex flex-col items-center text-center flex-1">
+          <div class="w-12 h-12 rounded-full bg-gray-200 text-gray-500 flex items-center justify-center mb-4">
+            <i class="fas fa-box-open text-xl"></i>
+          </div>
+          <h3 class="font-semibold mb-2">纸箱拍照</h3>
+          <p class="text-sm text-gray-600">拍摄纸箱照片</p>
+        </div>
+        <!-- 步骤 5 -->
+        <div class="step-card bg-white p-6 rounded-xl shadow flex flex-col items-center text-center flex-1">
+          <div class="w-12 h-12 rounded-full bg-gray-200 text-gray-500 flex items-center justify-center mb-4">
+            <i class="fas fa-pallet text-xl"></i>
+          </div>
+          <h3 class="font-semibold mb-2">托盘拍照</h3>
+          <p class="text-sm text-gray-600">拍摄托盘照片</p>
+        </div>
+        <!-- 步骤 6 -->
+        <div class="step-card bg-white p-6 rounded-xl shadow flex flex-col items-center text-center flex-1">
+          <div class="w-12 h-12 rounded-full bg-gray-200 text-gray-500 flex items-center justify-center mb-4">
+            <i class="fas fa-barcode text-xl"></i>
+          </div>
+          <h3 class="font-semibold mb-2">扫描托盘</h3>
+          <p class="text-sm text-gray-600">识别托盘产品数量</p>
+        </div>
+        <!-- 步骤 7 -->
+        <div class="step-card bg-white p-6 rounded-xl shadow flex flex-col items-center text-center flex-1">
+          <div class="w-12 h-12 rounded-full bg-gray-200 text-gray-500 flex items-center justify-center mb-4">
+            <i class="fas fa-cloud-upload-alt text-xl"></i>
+          </div>
+          <h3 class="font-semibold mb-2">上传并调用接口</h3>
+          <p class="text-sm text-gray-600">上传照片至七牛云</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 纸箱信息录入与条码生成模块 -->
+    <section class="mb-16">
+      <h2 class="text-2xl font-semibold mb-6">纸箱信息录入</h2>
+      <div class="bg-white p-8 rounded-xl shadow">
+        <div class="grid grid-cols-2 gap-8">
+          <div>
+            <form class="space-y-6">
+              <div>
+                <label class="block text-gray-700 mb-2">纸箱编号</label>
+                <input type="text" class="w-full p-3 border border-gray-300 rounded-md" placeholder="请输入纸箱编号">
+              </div>
+              <div>
+                <label class="block text-gray-700 mb-2">PCBA 数量</label>
+                <input type="number" class="w-full p-3 border border-gray-300 rounded-md" placeholder="请输入可包装数量">
+              </div>
+              <div class="flex space-x-4">
+                <button type="button" class="bg-primary hover:bg-secondary text-white px-6 py-3 rounded-button whitespace-nowrap transition flex-1">生成条码</button>
+                <button type="button" class="bg-gray-200 hover:bg-gray-300 px-6 py-3 rounded-button whitespace-nowrap transition flex-1">打印条码</button>
+              </div>
+            </form>
+          </div>
+          <div class="flex flex-col items-center justify-center">
+            <div class="border-2 border-dashed border-gray-300 rounded-xl w-full h-48 flex items-center justify-center mb-4">
+              <span class="text-gray-500">条码预览区域</span>
+            </div>
+            <p class="text-sm text-gray-600">生成的条码将显示在此处</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 图像采集与处理功能区 -->
+    <section class="mb-16">
+      <h2 class="text-2xl font-semibold mb-6">图像采集</h2>
+      <div class="grid grid-cols-2 gap-8">
+        <!-- 纸箱拍照 -->
+        <div class="bg-white p-6 rounded-xl shadow">
+          <h3 class="text-xl font-semibold mb-4">纸箱拍照</h3>
+          <div class="camera-preview w-full h-64 rounded-lg mb-4"></div>
+          <div class="flex justify-between items-center">
+            <button class="bg-primary hover:bg-secondary text-white px-6 py-3 rounded-button whitespace-nowrap transition">
+              <i class="fas fa-camera mr-2"></i> 拍照
+            </button>
+            <div class="flex space-x-2">
+              <button class="bg-gray-200 hover:bg-gray-300 px-4 py-2 rounded-button whitespace-nowrap transition">
+                <i class="fas fa-sync-alt"></i>
+              </button>
+              <button class="bg-gray-200 hover:bg-gray-300 px-4 py-2 rounded-button whitespace-nowrap transition">
+                <i class="fas fa-expand"></i>
+              </button>
+            </div>
+          </div>
+          <div class="mt-4">
+            <p class="text-sm text-gray-600 mb-2">拍摄预览</p>
+            <div class="flex space-x-2">
+              <div class="border border-gray-300 rounded-md w-16 h-16"></div>
+              <div class="border border-gray-300 rounded-md w-16 h-16"></div>
+              <div class="border border-gray-300 rounded-md w-16 h-16"></div>
+            </div>
+          </div>
+        </div>
+        <!-- 托盘拍照 -->
+        <div class="bg-white p-6 rounded-xl shadow">
+          <h3 class="text-xl font-semibold mb-4">托盘拍照</h3>
+          <div class="camera-preview w-full h-64 rounded-lg mb-4"></div>
+          <div class="flex justify-between items-center">
+            <button class="bg-primary hover:bg-secondary text-white px-6 py-3 rounded-button whitespace-nowrap transition">
+              <i class="fas fa-camera mr-2"></i> 拍照
+            </button>
+            <div class="flex space-x-2">
+              <button class="bg-gray-200 hover:bg-gray-300 px-4 py-2 rounded-button whitespace-nowrap transition">
+                <i class="fas fa-sync-alt"></i>
+              </button>
+              <button class="bg-gray-200 hover:bg-gray-300 px-4 py-2 rounded-button whitespace-nowrap transition">
+                <i class="fas fa-expand"></i>
+              </button>
+            </div>
+          </div>
+          <div class="mt-4">
+            <p class="text-sm text-gray-600 mb-2">拍摄预览</p>
+            <div class="flex space-x-2">
+              <div class="border border-gray-300 rounded-md w-16 h-16"></div>
+              <div class="border border-gray-300 rounded-md w-16 h-16"></div>
+              <div class="border border-gray-300 rounded-md w-16 h-16"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 扫描识别与状态显示面板 -->
+    <section class="mb-16">
+      <h2 class="text-2xl font-semibold mb-6">扫描识别</h2>
+      <div class="grid grid-cols-2 gap-8">
+        <!-- 纸箱扫描 -->
+        <div class="bg-white p-6 rounded-xl shadow">
+          <h3 class="text-xl font-semibold mb-4">纸箱条码扫描</h3>
+          <div class="flex items-center justify-center mb-6">
+            <div class="w-32 h-32 rounded-full bg-gray-100 flex items-center justify-center border-2 border-dashed border-gray-300">
+              <i class="fas fa-qrcode text-4xl text-gray-400"></i>
+            </div>
+          </div>
+          <div class="flex justify-center mb-4">
+            <button class="bg-primary hover:bg-secondary text-white px-8 py-3 rounded-button whitespace-nowrap transition flex items-center">
+              <i class="fas fa-barcode mr-2"></i> 开始扫描
+            </button>
+          </div>
+          <div class="bg-green-100 text-green-800 p-4 rounded-lg mb-4">
+            <p class="font-semibold">扫描成功</p>
+            <p>纸箱编号：CTN20230515001</p>
+            <p>PCBA 数量：50 个</p>
+          </div>
+        </div>
+        <!-- 托盘扫描 -->
+        <div class="bg-white p-6 rounded-xl shadow">
+          <h3 class="text-xl font-semibold mb-4">托盘条码扫描</h3>
+          <div class="flex items-center justify-center mb-6">
+            <div class="w-32 h-32 rounded-full bg-gray-100 flex items-center justify-center border-2 border-dashed border-gray-300">
+              <i class="fas fa-barcode text-4xl text-gray-400"></i>
+              </div>
+          </div>
+          <div class="flex justify-center mb-4">
+            <button class="bg-primary hover:bg-secondary text-white px-8 py-3 rounded-button whitespace-nowrap transition flex items-center">
+              <i class="fas fa-barcode mr-2"></i> 开始扫描
+            </button>
+          </div>
+          <div class="bg-yellow-100 text-yellow-800 p-4 rounded-lg mb-4">
+            <p class="font-semibold">识别中...</p>
+            <p>已识别产品：42 个</p>
+            <p>状态：未装满</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 自动化数据接收与上传控制区 -->
+    <section class="mb-16">
+      <h2 class="text-2xl font-semibold mb-6">数据处理</h2>
+      <div class="bg-white p-6 rounded-xl shadow">
+        <div class="grid grid-cols-3 gap-6 mb-6">
+          <div class="border border-gray-300 rounded-lg p-4">
+            <h3 class="font-semibold mb-2">接收数据</h3>
+            <p class="text-sm text-gray-600 mb-3">来自自动化设备的图像信息</p>
+            <button class="bg-primary hover:bg-secondary text-white px-4 py-2 rounded-button whitespace-nowrap transition w-full">接收数据</button>
+          </div>
+          <div class="border border-gray-300 rounded-lg p-4">
+            <h3 class="font-semibold mb-2">图像上传</h3>
+            <p class="text-sm text-gray-600 mb-3">上传至七牛云存储</p>
+            <button class="bg-primary hover:bg-secondary text-white px-4 py-2 rounded-button whitespace-nowrap transition w-full">开始上传</button>
+          </div>
+          <div class="border border-gray-300 rounded-lg p-4">
+            <h3 class="font-semibold mb-2">调用 MES</h3>
+            <p class="text-sm text-gray-600 mb-3">触发 MES 系统接口</p>
+            <button class="bg-primary hover:bg-secondary text-white px-4 py-2 rounded-button whitespace-nowrap transition w-full">调用接口</button>
+          </div>
+        </div>
+        <div class="mb-4">
+          <div class="flex justify-between mb-2">
+            <span>上传进度</span>
+            <span>80%</span>
+          </div>
+          <div class="w-full bg-gray-200 rounded-full h-2.5">
+            <div class="bg-primary h-2.5 rounded-full" style="width: 80%"></div>
+          </div>
+        </div>
+        <div class="bg-blue-50 p-4 rounded-lg">
+          <p class="font-semibold mb-1">上传成功</p>
+          <p class="text-sm">文件链接：<a href="https://mastergo.com/file/175672845573842?page_id=M#" class="text-primary hover:underline">https://qiniu.example.com/ctn20230515001.jpg</a></p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 包装记录与操作日志展示 -->
+    <section>
+      <h2 class="text-2xl font-semibold mb-6">包装记录与日志</h2>
+      <div class="grid grid-cols-2 gap-8">
+        <!-- 包装记录 -->
+        <div class="bg-white p-6 rounded-xl shadow">
+          <div class="flex justify-between items-center mb-4">
+            <h3 class="text-xl font-semibold">包装记录</h3>
+            <div class="flex space-x-2">
+              <input type="text" class="p-2 border border-gray-300 rounded-md text-sm" placeholder="搜索记录">
+              <button class="bg-gray-200 hover:bg-gray-300 px-4 py-2 rounded-button whitespace-nowrap transition">
+                <i class="fas fa-filter"></i>
+              </button>
+            </div>
+          </div>
+          <div class="overflow-x-auto">
+            <table class="w-full text-sm">
+              <thead>
+                <tr class="bg-gray-100">
+                  <th class="p-3 text-left">时间</th>
+                  <th class="p-3 text-left">纸箱编号</th>
+                  <th class="p-3 text-left">产品数量</th>
+                  <th class="p-3 text-left">操作员</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="border-b">
+                  <td class="p-3">2023-05-15 14:30</td>
+                  <td class="p-3">CTN20230515001</td>
+                  <td class="p-3">50</td>
+                  <td class="p-3">张伟</td>
+                </tr>
+                <tr class="border-b">
+                  <td class="p-3">2023-05-15 14:25</td>
+                  <td class="p-3">CTN20230515002</td>
+                  <td class="p-3">45</td>
+                  <td class="p-3">李娜</td>
+                </tr>
+                <tr class="border-b">
+                  <td class="p-3">2023-05-15 14:20</td>
+                  <td class="p-3">CTN20230515003</td>
+                  <td class="p-3">50</td>
+                  <td class="p-3">王强</td>
+                </tr>
+                <tr class="border-b">
+                  <td class="p-3">2023-05-15 14:15</td>
+                  <td class="p-3">CTN20230515004</td>
+                  <td class="p-3">48</td>
+                  <td class="p-3">陈美玲</td>
+                </tr>
+                <tr>
+                  <td class="p-3">2023-05-15 14:10</td>
+                  <td class="p-3">CTN20230515005</td>
+                  <td class="p-3">50</td>
+                  <td class="p-3">赵军</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <!-- 操作日志 -->
+        <div class="bg-white p-6 rounded-xl shadow">
+          <h3 class="text-xl font-semibold mb-4">操作日志</h3>
+          <div class="bg-gray-50 rounded-lg p-4 h-80 overflow-y-auto">
+            <ul class="space-y-3 text-sm">
+              <li class="flex">
+                <span class="text-gray-500 w-24">14:30:05</span>
+                <span>张伟 执行了纸箱扫描操作</span>
+              </li>
+              <li class="flex">
+                <span class="text-gray-500 w-24">14:30:12</span>
+                <span>系统识别到纸箱 CTN20230515001</span>
+              </li>
+              <li class="flex">
+                <span class="text-gray-500 w-24">14:30:20</span>
+                <span>张伟 拍摄了纸箱照片</span>
+              </li>
+              <li class="flex">
+                <span class="text-gray-500 w-24">14:30:35</span>
+                <span>张伟 拍摄了托盘照片</span>
+              </li>
+              <li class="flex">
+                <span class="text-gray-500 w-24">14:30:42</span>
+                <span>系统识别托盘产品数量：42 个</span>
+              </li>
+              <li class="flex">
+                <span class="text-gray-500 w-24">14:30:50</span>
+                <span>张伟 开始上传图像文件</span>
+              </li>
+              <li class="flex">
+                <span class="text-gray-500 w-24">14:31:05</span>
+                <span>图像上传成功至七牛云</span>
+              </li>
+              <li class="flex">
+                <span class="text-gray-500 w-24">14:31:10</span>
+                <span>系统调用 MES 接口成功</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="bg-gray-900 text-white py-8 mt-16">
+    <div class="max-w-7xl mx-auto px-8 text-center">
+      <p>© 2023 纸箱包装管理系统. 保留所有权利.</p>
+    </div>
+  </footer>
+
+<script>
+      window.addEventListener('click', (event) => {
+        const target = event.target;
+        if (target.tagName === 'A' || target.closest('a')) {
+          event.preventDefault();
+          const closest = target.closest('a');
+          if (!closest) return;
+          if (closest.tagName === 'A') {
+            event.preventDefault();
+            const href = closest.getAttribute('href');
+            if (!href) return;
+            // check is void link
+            if (['#', 'javascript:void(0)', ''].includes(href)) {
+              return;
+            }
+            // 锚点链接也不处理
+            if (href.startsWith('#')) {
+              return;
+            }
+            window.open(closest.href, '_blank');
+          }
+        }
+      });
+      document.addEventListener(
+        'submit',
+        (event) => {
+          event.preventDefault();
+        },
+        true,
+      );
+
+      window.addEventListener('beforeunload', function (event) {
+        console.log('Intercepted beforeunload event');
+        // 阻止页面离开
+        event.preventDefault();
+        // event.returnValue = ''; // 对于一些旧浏览器，这是必要的
+      });
+    </script></body></html>
