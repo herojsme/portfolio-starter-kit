@@ -1,23 +1,22 @@
 ---
 sort: 5
-title: "电容3D高度测量"
-excerpt: "电容3D高度测量"
-coverImage: "/assets/profiles/vision/capacitor1.jpg"
-date: "2023.6-2023.8"
+title: "手机外屏四轴机器人自动取料贴合纠偏 "
+excerpt: "手机外屏四轴机器人自动取料贴合纠偏 "
+coverImage: "/assets/profiles/vision/empty.png"
+date: "2022.7-2022.9"
 author:
   name: JJ Kasper
   picture: "/assets/blog/authors/jj.jpeg"
 ogImage:
   url: "/assets/blog/hello-world/cover.jpg"
-flow: 
-  image1: "/assets/profiles/vision/capacitor1.jpg"
-  image2: "/assets/profiles/vision/capacitor2.jpg"
-  image3: "/assets/profiles/vision/capacitor3.jpg"
 ---
 
-使用激光三角测量系统，实现高精度3D点云重建与高度测量。完成相机内参、高度外参、光平面位姿、运动参数的全链路标定，通过线激光扫描获取点云数据，开发点云处理算法实现高度计算与深度图解析，**测量重复精度达0.1mm**。
+手机外屏四轴机器人自动取料贴合纠偏。
 
 ## 详情
 
-技术栈：3D测量；
-硬件：3D相机
+- 硬件：爱普生 SCARA + 多相机阵列 + 网口/串口环形组网，节拍 1.2 s/片，重复精度 ±0.02 mm。  
+- 算法：Halcon 自研「上相机九点标定 + 下相机二次仿射纠偏」双闭环，大尺寸工件多相机坐标统一，补偿残差 < 0.05 mm。  
+- 架构：六层解耦（UI/业务/数据/通信/工具/实体），相机切换、抓放轨迹、胶路补偿全配置化，换型时间 < 5 min。  
+- 场景：手机壳、电子支架等多相机联合定位贴合 + 上下相机二次纠偏，上相机检测物料粗定位位置，下相机进行二次仿射矩阵纠偏补偿，然后在放料位进行补偿贴合，已量产 18 个月，良率 99.5 %，省人 3 人/线。
+- 技术栈：tcp旋转中心计算；运动九点标定；机器人网口通信；多相机线程同步、上下相机纠偏业务、	多相机贴合；模版匹配配合卡尺测量算法寻找中心点；

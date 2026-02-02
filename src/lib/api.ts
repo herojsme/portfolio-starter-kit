@@ -1,4 +1,4 @@
-import { Post,Experience } from "@/interfaces/post";
+import { Post, Experience } from "@/interfaces/post";
 import fs from "fs";
 import matter from "gray-matter";
 import { join } from "path";
@@ -49,6 +49,6 @@ export function getAllProfiles(): Experience[] {
   const experiences = slugs
     .map((slug) => getProfileBySlug(slug))
     // sort posts by date in descending order
-    .sort((experience1, experience2) => (experience1.sort > experience2.sort ? 1 : -1));
+    .sort((experience1, experience2) => (experience1.sort > experience2.sort ? -1:1));
   return experiences;
 }

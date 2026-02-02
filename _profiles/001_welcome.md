@@ -1,5 +1,5 @@
 ---
-sort: 0
+sort: 9999
 title: "欢迎查看我的个人网站"
 excerpt: "欢迎查看"
 coverImage: "/assets/profiles/hello&welcome2.png"

@@ -1,29 +1,36 @@
 ---
 sort: 2
-title: "sensor擦拭&ircut锁付机一期"
-excerpt: "sensor擦拭&ircut锁付机一期"
-coverImage: "/assets/profiles/vision/BoardMeasureDustProject/appUI.png"
-date: "2025.6-2025.8"
+title: "宁波喜悦智行"
+excerpt: "宁波喜悦智行(宁波喜悦智行一期) "
+coverImage: "/assets/profiles/frontEnd/NingboJoy0.png"
+date: "2019.03-2020.8"
 author:
-  name: 廿一
+  name: JJ Kasper
   picture: "/assets/blog/authors/jj.jpeg"
 ogImage:
   url: "/assets/blog/hello-world/cover.jpg"
 flow: 
-  image1: "/assets/profiles/vision/BoardMeasureDustProject/machine1.jpg"
-  image2: "/assets/profiles/vision/BoardMeasureDustProject/flow.png"
-  image3: "/assets/profiles/vision/BoardMeasureDustProject/chip_sample.jpg"
-  image4: "/assets/profiles/vision/BoardMeasureDustProject/deep_learning_tagging1.png"
-  image5: "/assets/profiles/vision/BoardMeasureDustProject/deep_learning_tagging2.png"
-  image6: "/assets/profiles/vision/BoardMeasureDustProject/deep_learning_tagging3.jpg"
-  image7: "/assets/profiles/vision/BoardMeasureDustProject/deep_learning.jpg"
-  image8: "/assets/profiles/vision/BoardMeasureDustProject/dp_run_effect.png"
-RealEffectVideo: "/assets/profiles/vision/BoardMeasureDustProject/app_run_effect.mp4"
+  image1: "/assets/profiles/frontEnd/NingboJoy2.png"
+  image2: "/assets/profiles/frontEnd/NingboJoy4.png"
+  image3: "/assets/profiles/frontEnd/NingboJoy5.png"  
+  image4: "/assets/profiles/frontEnd/nanguan.png"  
+  image5: "/assets/profiles/frontEnd/ShanghaiZhongyue.png"  
+  image6: "/assets/profiles/frontEnd/WeiShibo.png"  
+  image7: "/assets/profiles/frontEnd/WufangtongdaMiniProgram.jpg"  
+  image8: "/assets/profiles/frontEnd/baiyun2.png"  
 ---
 
-主导开发sensor智能处理系统，集成自动化擦拭、IRCUT精密锁付、镜面缺陷检测等核心功能。针对30+款sensor型号的适配挑战，设计基于深度学习语义分割+后处理的智能算法架构，精确定位识别sensor镜面状态与IRCUT镜头翻转螺丝孔位置，检测准确率稳定在98%，显著提升产线自动化水平和生产效率。
+宁波喜悦智行项目(一期) http://121.36.240.39/#/login。 
+类似的项目还做了 
+  伟世博【https://yc.newever.cn/#/login】、
+  上海众月【http://123.60.61.41/client/#/login】、
+  南冠物流【https://sys.scg-scg.com/#/login】、
+  白云化工【https://tms.baiyun.com.cn:8663/#/login】
 
 ## 详情
 
-硬件：2000万像素相机擦拭相机（海康） + 1X远心镜头（视清）；1200万测距定位相机（海康）；
-技术栈：Yolo；语义分割；定位测距；mysql；模板匹配；
+- 覆盖仓、干、配、关、财 5 大场景，陆海空+保税一站式下单，订单、报关、查验、税费秒级协同。  
+- 智能配载算法提升装载率 18 %，动态路径规划让准时送达率 > 97 %，跨境全程可视化 0 断点。  
+- 功能矩阵：订单中心（普通/组板/跨境）、运输管理(运输、车辆委托、行程查看)、行程跟踪、边检报关(报关、查验、送检)、查验送检、仓储管理(出入仓、拼装仓出入)、港口海空动态、客户 KPI、财务自动结算应收应付。
+
+react、react-router-dom、react-dom、redux、antdesign、dva、axios、echarts、lodash、typescript
